@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import DynamicForm from "./components/DynamicForm";
+import React, { useState, useEffect } from "react";
+import { DynamicForm } from "./components/DynamicForm";
 import "./App.css";
 
 function App() {
@@ -12,15 +12,25 @@ function App() {
   // });
 
   const [inputData, setInputData] = useState({});
+  // checkbox needs to be handle alone
+  const [isChecked, setIsChecked] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     alert(JSON.stringify(inputData));
   }
 
+  useEffect(() => {
+    console.log(inputData);
+  }, [isChecked]);
+
   function handleInputChange(e) {
     setInputData({ ...inputData, [e.target.id]: e.target.value });
-    console.log(e.target.value);
+  }
+
+  function handleCheckboxChange(e) {
+    setIsChecked((x) => !x);
+    setInputData({ ...inputData, [e.target.id]: e.target.checked });
   }
 
   return (
@@ -36,13 +46,12 @@ function App() {
           min: 0,
           max: 100,
         },
-        {
-          key: "truth",
-          type: "checkbox",
-        },
+        { key: "truth", type: "checkbox" },
+        { key: "wrong", type: "checkbox" },
       ]}
       onHandleSubmit={handleSubmit}
       onHandleInputChange={handleInputChange}
+      onHandleCheckboxChange={handleCheckboxChange}
       message={inputData}
     />
   );
